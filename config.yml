@@ -7,6 +7,6 @@ database:
   username: root
   password: root
   timeout: 5s
-  database: bigwigerp
+  database: fsgql
   suffix: arxpr
   default_schema: public
