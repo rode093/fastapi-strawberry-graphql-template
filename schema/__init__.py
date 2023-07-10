@@ -8,6 +8,7 @@ from schema.resolvers.user_status_resolver import resolve_user_status
 @strawberry.type
 class Query:
     user: User = strawberry.field(resolver=resolve_user)
+    user_status: UserStatus = strawberry.field(resolver=resolve_user_status)
 
 
 schema = strawberry.Schema(
