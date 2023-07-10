@@ -11,8 +11,6 @@ from services.db import DB
 
 graphql_app = GraphQLRouter(schema)
 
-Config()  # load config
-DB()  # initialize db connection
 
 app = FastAPI()
 app.include_router(graphql_app, prefix="/graphql")
