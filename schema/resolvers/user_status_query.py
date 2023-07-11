@@ -1,5 +1,5 @@
 from schema.types.user_status import UserStatus
-from typing import List
+from typing import List, Optional
 import models
 
 import strawberry
@@ -14,6 +14,6 @@ class UserStatusQuery:
         return UserStatus(record)
 
     @strawberry.field
-    def user_statuses(self) -> List[UserStatus]:
-        records = models.UserStatus().all()
+    def user_statuses(self, codes: Optional[List[str]]) -> List[UserStatus]:
+        records = models.UserStatus().all(codes)
         return list(map(lambda record: UserStatus(record), records))
