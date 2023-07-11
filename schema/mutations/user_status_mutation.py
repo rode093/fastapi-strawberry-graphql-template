@@ -9,8 +9,9 @@ from typing import List
 class UserStatusMutation():
     @strawberry.mutation(extensions=[InputMutationExtension()])
     def save_user_status(self, code: str, label: str) -> UserStatus:
-        status = models.UserStatus(code=code, label=label).save()
-        return UserStatus(code=status.code, label=status.label)
+        status = models.UserStatus(code=code, label=label)
+        status.save()
+        return status
 
     @strawberry.mutation()
     def delete_user_status(self, code: str) -> None:

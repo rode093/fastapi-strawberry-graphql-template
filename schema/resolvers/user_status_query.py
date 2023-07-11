@@ -9,7 +9,6 @@ import strawberry
 class UserStatusQuery:
     @strawberry.field
     def user_status(self, code: str) -> UserStatus:
-        print(code)
         record = models.UserStatus().get(code)
         return UserStatus(record)
 

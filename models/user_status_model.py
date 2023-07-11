@@ -16,16 +16,15 @@ class UserStatus(Base):
     users = relationship('User')
 
     def save(self):
-
+        record = self.get(self.code)
+        if record == None:
+            record = UserStatus(
+                code=self.code, label=self.label)  # record is new
+        else:
+            record.label = self.label  # record exists so just update the attributes
         with Session(DB().engine) as session:
-            record = self.get(self.code)
-            if record == None:
-                session.add(self)
-            else:
-                record.label = self.label
-                session.add(record)
+            session.add(record)
             session.commit()
-            return self
 
     def get(self, code: str):
         with Session(DB().engine) as session:
