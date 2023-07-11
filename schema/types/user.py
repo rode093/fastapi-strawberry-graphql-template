@@ -18,9 +18,9 @@ class User:
     def __init__(self, user: models.User = None) -> None:
         if user != None:
             self.id = user.id
-            first_name = user.first_name
-            last_name = user.last_name
-            email = user.email
-            status = models.UserStatus.get(user.status_code)
-            created_at = user.created_at
-            updated_at = user.updated_at
+            self.first_name = user.first_name
+            self.last_name = user.last_name
+            self.email = user.email
+            self.status = models.UserStatus.get(user.status_code)
+            self.created_at = user.created_at
+            self.updated_at = user.updated_at

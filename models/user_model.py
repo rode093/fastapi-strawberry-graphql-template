@@ -1,15 +1,21 @@
-from sqlalchemy import Column, String, text, DateTime, ForeignKey, MetaData
-import uuid
+from email.policy import default
+from sqlalchemy import Column, String, text, DateTime, ForeignKey
 from models.base_model import Base
+import strawberry
+from sqlalchemy.orm import Session
+from services.db import DB
+from datetime import datetime
+from uuid import uuid4
+from sqlalchemy.dialects import postgresql
 
 
 class User(Base):
     __tablename__ = 'user'
 
     id = Column(
-        String,
+        postgresql.UUID(as_uuid=True),
         primary_key=True,
-        default=uuid.uuid4()
+        default_factory=uuid4,
     )
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
@@ -20,3 +26,14 @@ class User(Base):
         "user_status.code"))
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=True)
+
+    def save(self, session: Session) -> None:
+        self.setDateTimestamps()
+        session.add(self)
+        session.commit()
+
+    def setDateTimestamps(self):
+        if (self.id):
+            self.updated_at = datetime.now()
+        else:
+            self.created_at = datetime.now()
