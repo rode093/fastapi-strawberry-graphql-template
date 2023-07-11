@@ -1,8 +1,8 @@
 """Add user and user status
 
-Revision ID: 2246e3550e81
+Revision ID: a4f90ae69d8c
 Revises: 
-Create Date: 2023-07-10 15:56:15.759607
+Create Date: 2023-07-12 00:28:04.883385
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2246e3550e81'
+revision = 'a4f90ae69d8c'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,7 @@ def upgrade() -> None:
     schema='public'
     )
     op.create_table('user',
-    sa.Column('id', sa.String(), nullable=False),
+    sa.Column('id', sa.UUID(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=False),
     sa.Column('last_name', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),

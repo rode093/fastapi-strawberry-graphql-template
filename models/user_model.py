@@ -1,11 +1,11 @@
 from email.policy import default
-from sqlalchemy import Column, String, text, DateTime, ForeignKey
+import uuid
+from sqlalchemy import Column, String, Text, text, DateTime, ForeignKey
 from models.base_model import Base
 import strawberry
 from sqlalchemy.orm import Session
 from services.db import DB
 from datetime import datetime
-from uuid import uuid4
 from sqlalchemy.dialects import postgresql
 
 
@@ -15,7 +15,7 @@ class User(Base):
     id = Column(
         postgresql.UUID(as_uuid=True),
         primary_key=True,
-        default_factory=uuid4,
+        default=uuid.uuid4
     )
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)

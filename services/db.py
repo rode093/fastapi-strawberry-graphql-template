@@ -1,6 +1,9 @@
+from ctypes import cast
 from sqlalchemy import create_engine, URL
 from singleton_decorator import singleton
 from services.config import Config
+
+from sqlalchemy.dialects import postgresql
 
 
 @singleton
@@ -21,3 +24,5 @@ class DB:
                     port=config["port"],
                     database=config["database"]
                 )
+
+
