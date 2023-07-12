@@ -1,5 +1,7 @@
+from datetime import datetime
+from email import message
 from lib.helpers import compare_password_hash, create_password_hash
-from schema.types.response import ErrorResponse
+from schema.types.authentication import AuthToken
 from services.db import DB
 import strawberry
 from strawberry.field_extensions import InputMutationExtension
@@ -7,6 +9,7 @@ from schema.types.user import User
 import models
 from typing import List
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
 
 
 @strawberry.type
@@ -23,15 +26,16 @@ class UserMutation():
             return User(user=user)
 
     @strawberry.mutation()
-    def login(self, email: str, password: str) -> None:
-        with Session(DB().context) as session:
+    def login(self, email: str, password: str) -> AuthToken:
+        with Session(DB().engine) as session:
             try:
                 # throws exception is none found
-                user = session.query(User).where(
-                    email=email, status_code='ACTIVE').one()
+                user = session.query(models.User).where(
+                    models.User.email == email, models.User.status_code == 'ACTIVE').one()
                 if compare_password_hash(password, user.password):
                     # login successful, generate token
-                    pass
-            except Exception:
-                return ErrorResponse(code="AUTH_FAILED", message="Authentication Failed")
-            return None
+                    return AuthToken(access_token="akjfajfafkjapsdfasfasfasfaf", refresh_token="ahfahjfajufaisjfq908uthjapjcnafaf", access_token_expires_at=datetime.now(), refresh_token_expires_at=datetime.now())
+
+            except NoResultFound:
+                raise Exception("Authentication Failed")
+            raise Exception("Invalid Credentials!")
