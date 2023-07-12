@@ -1,4 +1,5 @@
-from lib.helpers import create_password_hash
+from lib.helpers import compare_password_hash, create_password_hash
+from schema.types.response import ErrorResponse
 from services.db import DB
 import strawberry
 from strawberry.field_extensions import InputMutationExtension
@@ -21,7 +22,16 @@ class UserMutation():
             print(user)
             return User(user=user)
 
-    # @strawberry.mutation()
-    # def delete_user(self, code: str) -> None:
-    #     models.UserStatus().delete(code=code)
-    #     return None
+    @strawberry.mutation()
+    def login(self, email: str, password: str) -> None:
+        with Session(DB().context) as session:
+            try:
+                # throws exception is none found
+                user = session.query(User).where(
+                    email=email, status_code='ACTIVE').one()
+                if compare_password_hash(password, user.password):
+                    # login successful, generate token
+                    pass
+            except Exception:
+                return ErrorResponse(code="AUTH_FAILED", message="Authentication Failed")
+            return None
