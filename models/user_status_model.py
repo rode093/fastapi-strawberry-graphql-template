@@ -26,7 +26,8 @@ class UserStatus(Base):
             session.add(record)
             session.commit()
 
-    def get(self, code: str):
+    @staticmethod
+    def get(code: str):
         with Session(DB().engine) as session:
             return session.query(UserStatus).filter(
                 UserStatus.code == code).first()

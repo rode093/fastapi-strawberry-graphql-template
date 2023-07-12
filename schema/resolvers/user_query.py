@@ -10,7 +10,7 @@ import strawberry
 class UserQuery:
     @strawberry.field
     def user(self, id: UUID) -> User:
-        record = models.User().get(id).first()
+        record = models.User().get(id)
         return User(record)
 
     @strawberry.field

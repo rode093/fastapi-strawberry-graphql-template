@@ -1,6 +1,7 @@
 from email.policy import default
 import uuid
-from sqlalchemy import Column, String, Text, text, DateTime, ForeignKey
+from sqlalchemy import Column, String, Text, text, DateTime, ForeignKey, select
+import models
 from models.base_model import Base
 import strawberry
 from sqlalchemy.orm import Session
@@ -37,3 +38,8 @@ class User(Base):
             self.updated_at = datetime.now()
         else:
             self.created_at = datetime.now()
+
+    @staticmethod
+    def get(id: str):
+        with Session(DB().engine) as session:
+            return session.query(models.User).where(models.User.id == id).one_or_none()
