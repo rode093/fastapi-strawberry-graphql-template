@@ -1,3 +1,4 @@
+from lib.helpers import create_password_hash
 from services.db import DB
 import strawberry
 from strawberry.field_extensions import InputMutationExtension
@@ -14,7 +15,7 @@ class UserMutation():
         user = models.User(first_name=first_name, last_name=last_name,
                            email=email, status_code=status)
         if password != None:
-            user.password = password
+            user.password = create_password_hash(password)
         with Session(DB().engine) as session:
             user.save(session)
             print(user)
