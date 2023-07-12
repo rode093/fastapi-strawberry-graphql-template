@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from services.db import DB
 from datetime import datetime
 from sqlalchemy.dialects import postgresql
+from lib.helpers import create_password_hash
 
 
 class User(Base):
@@ -29,17 +30,20 @@ class User(Base):
     updated_at = Column(DateTime, nullable=True)
 
     def save(self, session: Session) -> None:
-        self.setDateTimestamps()
+        self._before_save()
         session.add(self)
         session.commit()
+
+    @staticmethod
+    def get(id: str):
+        with Session(DB().engine) as session:
+            return session.query(models.User).where(models.User.id == id).one_or_none()
+
+    def _before_save(self) -> None:
+        self.setDateTimestamps()
 
     def setDateTimestamps(self):
         if (self.id):
             self.updated_at = datetime.now()
         else:
             self.created_at = datetime.now()
-
-    @staticmethod
-    def get(id: str):
-        with Session(DB().engine) as session:
-            return session.query(models.User).where(models.User.id == id).one_or_none()
