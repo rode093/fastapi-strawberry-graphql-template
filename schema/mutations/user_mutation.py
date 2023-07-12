@@ -34,7 +34,9 @@ class UserMutation():
                     models.User.email == email, models.User.status_code == 'ACTIVE').one()
                 if compare_password_hash(password, user.password):
                     # login successful, generate token
-                    return AuthToken(access_token="akjfajfafkjapsdfasfasfasfaf", refresh_token="ahfahjfajufaisjfq908uthjapjcnafaf", access_token_expires_at=datetime.now(), refresh_token_expires_at=datetime.now())
+                    token = models.AuthToken(user_id=user.id)  # generate token
+                    token.save(session)  # store token in db
+                    return AuthToken(token)
 
             except NoResultFound:
                 raise Exception("Authentication Failed")

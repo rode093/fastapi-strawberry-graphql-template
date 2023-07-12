@@ -48,6 +48,6 @@ class User(Base):
 
     def setDateTimestamps(self):
         if (self.id):
-            self.updated_at = datetime.now()
+            self.updated_at = datetime.utcnow()
         else:
-            self.created_at = datetime.now()
+            self.created_at = datetime.utcnow()
