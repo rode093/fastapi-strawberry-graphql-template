@@ -4,7 +4,6 @@ import uuid
 from sqlalchemy import Column, String, DateTime, ForeignKey
 import models
 from models.base_model import Base
-import strawberry
 from sqlalchemy.orm import Session, relationship, Mapped
 from services.db import DB
 from datetime import datetime
@@ -12,6 +11,7 @@ from sqlalchemy.dialects import postgresql
 from lib.helpers import create_password_hash
 from typing import List
 from models.auth_token import AuthToken
+import typing
 
 
 class User(Base):
@@ -51,3 +51,8 @@ class User(Base):
             self.updated_at = datetime.utcnow()
         else:
             self.created_at = datetime.utcnow()
+
+    @staticmethod
+    def all() -> List[any]:
+        with Session(DB().engine) as session:
+            return session.query(models.User).all()
